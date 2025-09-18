@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>India Daily News</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>📰 India Daily News</h1>
+    <p>Fresh headlines powered by Newsdata.io</p>
+  </header>
+
+  <main>
+    <div id="news-container">Loading news...</div>
+  </main>
+
+  <footer>
+    <p>© <span id="year"></span> India Daily News | Powered by Newsdata.io</p>
+  </footer>
+
+  <script>
+    document.getElementById("year").innerText = new Date().getFullYear();
+
+    async function fetchNews() {
+      try {
+        const res = await fetch("/api/fetch");
+        if (!res.ok) {
+          throw new Error("API error " + res.status);
+        }
+        const data = await res.json();
+        const articles = data.results || [];
+        const container = document.getElementById("news-container");
+        container.innerHTML = "";
+
+        if (articles.length === 0) {
+          container.innerHTML = "<p>No news available right now.</p>";
+          return;
+        }
+
+        articles.forEach(article => {
+          const card = document.createElement("div");
+          card.className = "news-card";
+          card.innerHTML = `
+            ${article.image_url ? `<img src="${article.image_url}" alt="News Image">` : ""}
+            <h2><a href="${article.link}" target="_blank">${article.title}</a></h2>
+            <p>${article.description || ""}</p>
+            <small>${article.pubDate || ""}</small>
+          `;
+          container.appendChild(card);
+        });
+      } catch (err) {
+        document.getElementById("news-container").innerHTML =
+          "<p style='color:red;'>Error loading news: " + err.message + "</p>";
+      }
+    }
+
+    fetchNews();
+  </script>
+</body>
+</html>

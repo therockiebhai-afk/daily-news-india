@@ -1,0 +1,11 @@
+{
+  "functions": {
+    "api/fetch.py": {
+      "runtime": "python3.9"
+    }
+  },
+  "routes": [
+    { "src": "/api/fetch", "dest": "api/fetch.py" },
+    { "src": "/(.*)", "dest": "/index.html" }
+  ]
+}
