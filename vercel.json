@@ -1,9 +1,9 @@
 {
-  "functions": {
-    "api/fetch.py": {
-      "runtime": "@vercel/python@3.1.57"
-    }
-  },
+  "builds": [
+    { "src": "api/fetch.py", "use": "@vercel/python@3.1.57" },
+    { "src": "index.html", "use": "@vercel/static" },
+    { "src": "styles.css", "use": "@vercel/static" }
+  ],
   "routes": [
     { "src": "/api/fetch", "dest": "api/fetch.py" },
     { "src": "/(.*)", "dest": "/index.html" }
